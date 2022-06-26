@@ -1,0 +1,49 @@
+:root {
+    --color1: #03045e;
+    --color2: #023e8a;
+    --color3: #0077b6;
+    --color4: #00b4d8;
+    --color5: #90e0ef;
+
+}
+.header-box {
+    background-color: var(--color1);
+    color: var(--color5);
+}
+
+.main {
+    display: flex;
+}
+
+.left-box {
+    background-color: var(--color2);
+    color: white;
+    width: 25%;
+    height: 75%;
+}
+
+.search-box {
+    background-color: var(--color3);
+    height: 150px;
+}
+
+.history-box {
+    background-color: var(--color4);
+    height: 500px;
+}
+
+.weather-box {
+    background-color: var(--color2);
+    margin-left: 25px;
+    width: 72%;
+}
+
+.main-weather {
+    background-color: var(--color3);
+    height: 330px;
+}
+
+.other-weather {
+    background-color: var(--color4);
+    height: 240px;
+}
