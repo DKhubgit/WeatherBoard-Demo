@@ -22,9 +22,27 @@
     height: 75%;
 }
 
+/* search box CSS */
 .search-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
     background-color: var(--color3);
     height: 150px;
+}
+
+label {
+    font-size: x-large;
+    text-decoration: underline;
+}
+
+input {
+    font-size: large;
+    border-radius: 10px;
+    width: 90%;
+    height: 40px;
+    margin-left: 15px;
 }
 
 .history-box {
