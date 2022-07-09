@@ -45,6 +45,20 @@ input {
     margin-left: 15px;
 }
 
+button {
+    font-weight: bold;
+    border-radius: 5px;
+    width: 50%;
+    height: 30px;
+    margin-left: 25%;
+}
+button:hover {
+    cursor: pointer;
+    border: solid black 3px;
+    background-color: antiquewhite;
+}
+
+/* History Box CSS */
 .history-box {
     background-color: var(--color4);
     height: 500px;
