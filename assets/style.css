@@ -79,7 +79,7 @@ button:hover {
     width: 72%;
 }
 
-.main-weather {
+.today-weather {
     background-color: var(--color3);
     height: 330px;
 }
