@@ -1,16 +1,17 @@
 
 var onecall = config.API_KEY_ONECALL;
 var geoLoc = config.API_KEY_LOCATION;
+var forecast = config.API_KEY_FORECAST;
 
 // need an async function to use await, executes asynchronously.
 async function initWeather() {
     var City = document.querySelector("input").value;
 
     //waits for a value (in this case an object) from the resulting promise of the function
-    //without an await it will just return the promise (not the actual object)
+    //without an await it will just return the promise and not the actual object
     var locData = await getGeoLocation(City);
     var data = await getCurrWeather(locData.lat, locData.lon, locData);
-
+    var otherData = await getForecast(locData.lat, locData.lon);
     displayWeather(data);
 
 }
@@ -38,8 +39,6 @@ function getGeoLocation(City) {
             country: data[0].country
         }
         return locData;
-        // displayLocation(Name, State, Country);
-        // getCurrWeather(cityLat, cityLon);
      })
      .catch(error => {
         console.error('There was an error with 1st fetch operation', error);
@@ -59,8 +58,11 @@ function getCurrWeather(Lat,Lon,locData) {
         }
     })
      .then(data => {
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var newData = locData;
-        newData.date = new Date(data.current.dt * 1000); //date is in milliseconds so multiple 1000
+        var date = new Date(data.current.dt * 1000); //date is in milliseconds so multiple 1000
+        console.log(date.getDay());
+        newData.date = '(' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ') ' + days[date.getDay()];
         newData.icon = data.current.weather[0].icon;
         newData.temp = data.current.temp; //Fahrenheit
         newData.humid = data.current.humidity; //in percentage %
@@ -69,11 +71,29 @@ function getCurrWeather(Lat,Lon,locData) {
         newData.main = data.current.weather[0].main;
         newData.des = data.current.weather[0].description;
         return newData;
-        // displayWeather(data);
     })
      .catch(error => {
         console.error('There was an error with 2nd Fetch operation', error);
     })
+}
+
+function getForecast(lat,lon) {
+    var url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + forecast;
+
+    return fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('There was an error with Forecast API');
+            }
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('There was an error with 3rd Fetch operation', error);
+        })
 }
 
 //city name, the date, an icon representation of weather conditions,
@@ -82,13 +102,6 @@ function displayWeather(data) {
     var weatherBox = document.querySelector('.today-weather');
     var tempBox = document.querySelector('.temp-box');
     console.log(data);
-
-    //removes the previous info before displaying new info
-    // if (tempBox.children.length !== 0) {
-    //     while (tempBox.firstChild) {
-    //         tempBox.removeChild(tempBox.firstChild);
-    //     }
-    // }
     if (weatherBox.children.length !== 0) {
         while (weatherBox.firstChild) {
             weatherBox.removeChild(weatherBox.firstChild);
@@ -111,7 +124,7 @@ function displayWeather(data) {
     tempBox.append(icon);
 
     var name = document.createElement('h2');
-    name.textContent = data.name + ", " + data.state;
+    name.textContent = data.name + ", " + data.state + ' ' + data.date;
     name.setAttribute('id', "city");
     weatherBox.append(name);
 
@@ -150,7 +163,6 @@ function displayWeather(data) {
         uviBox.append(colorBox);
     }
 
-
     var des = document.createElement('h3');
     des.setAttribute('class', 'small-data');
     des.textContent = "Condition: " + data.main + ' / ' + data.des;
@@ -162,3 +174,5 @@ function displayWeather(data) {
 
 //waits for the 'find weather' button to be clicked
 document.querySelector("button").addEventListener('click', initWeather);
+
+//maybe add a event listener for when the "enter" key is pressed

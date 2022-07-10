@@ -75,7 +75,7 @@ button:hover {
 
 /* weather box CSS */
 .weather-box {
-    background-color: var(--color2);
+    background-color: var(--color5);
     margin-left: 25px;
     width: 72%;
     color: white;
@@ -121,10 +121,10 @@ button:hover {
 }
 .today-weather {
     background-color: var(--color3);
-    height: 330px;
+    height: 350px;
 }
 
 .other-weather {
-    background-color: var(--color4);
+    background-color: var(--color3);
     height: 240px;
 }
