@@ -1,4 +1,6 @@
 
+var onecall = config.API_KEY_ONECALL;
+var geoLoc = config.API_KEY_LOCATION;
 
 
 function getGeoLocation() {
@@ -6,7 +8,7 @@ function getGeoLocation() {
     var cityLon; 
     var City = document.querySelector("input").value;
     //API url to get city's geolocation
-    var urlGeoLoc = "https://api.openweathermap.org/geo/1.0/direct?q=" + City + "&limit=1&appid=a10da6f6b4acf36309c658a9bd76edff";
+    var urlGeoLoc = "https://api.openweathermap.org/geo/1.0/direct?q=" + City + "&limit=1&appid=" + geoLoc;
 
     //calls the geolocation API from openweathermap
     return fetch(urlGeoLoc)
@@ -29,14 +31,11 @@ function getGeoLocation() {
      .catch(error => {
         console.error('There was an error with 1st fetch operation', error);
      })
-
-         //API url for the future days forecast weather
-         var urlFutureWeather = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cityLat + "&lon=" + cityLon + "&appid=a10da6f6b4acf36309c658a9bd76edff";
 }
 
 //gets the Current weather
 function getCurrWeather(Lat,Lon) {
-    var urlCurrWeather = "https://api.openweathermap.org/data/2.5/onecall?lat=" + Lat + "&lon=" + Lon + "&exclude=minutely,hourly,daily,alerts&units=imperial&appid=4ab78489d29f98fdcfcf8fe40a55555c";
+    var urlCurrWeather = "https://api.openweathermap.org/data/2.5/onecall?lat=" + Lat + "&lon=" + Lon + "&exclude=minutely,hourly,daily,alerts&units=imperial&appid=" + onecall;
     //calls the current weather API, checks response and catch
     fetch(urlCurrWeather)
      .then(response => {
