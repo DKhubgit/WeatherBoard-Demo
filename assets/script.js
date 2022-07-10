@@ -66,6 +66,8 @@ function getCurrWeather(Lat,Lon,locData) {
         newData.humid = data.current.humidity; //in percentage %
         newData.wind = data.current.wind_speed; //metre/sec
         newData.UV = data.current.uvi;
+        newData.main = data.current.weather[0].main;
+        newData.des = data.current.weather[0].description;
         return newData;
         // displayWeather(data);
     })
@@ -81,15 +83,24 @@ function displayWeather(data) {
     var tempBox = document.querySelector('.temp-box');
     console.log(data);
 
-    //removes the previous info before display new info
-    if (tempBox.children.length !== 0) {
-        while (tempBox.firstChild) {
-            tempBox.removeChild(temp.firstChild);
+    //removes the previous info before displaying new info
+    // if (tempBox.children.length !== 0) {
+    //     while (tempBox.firstChild) {
+    //         tempBox.removeChild(tempBox.firstChild);
+    //     }
+    // }
+    if (weatherBox.children.length !== 0) {
+        while (weatherBox.firstChild) {
+            weatherBox.removeChild(weatherBox.firstChild);
         }
     }
 
+    var tempBox = document.createElement('div');
+    tempBox.setAttribute('class', "temp-box");
+    weatherBox.append(tempBox);
+
     var temp = document.createElement('h1');
-    temp.textContent = data.temp;
+    temp.textContent = Math.floor(data.temp) + "°F ";
     temp.setAttribute('id', 'temperature');
     tempBox.append(temp);
 
@@ -103,6 +114,26 @@ function displayWeather(data) {
     name.textContent = data.name + ", " + data.state;
     name.setAttribute('id', "city");
     weatherBox.append(name);
+
+    var humid = document.createElement('h3');
+    humid.setAttribute('class', 'small-data');
+    humid.textContent = "Humidity: " + data.humid + "%";
+    weatherBox.append(humid);
+
+    var wind = document.createElement('h3');
+    wind.setAttribute('class', 'small-data');
+    wind.textContent = "Wind Speed: " + data.wind + " meter/sec";
+    weatherBox.append(wind);
+
+    var uvi = document.createElement('h3');
+    uvi.setAttribute('class', 'small-data');
+    uvi.textContent = "UV index: " + data.UV;
+    weatherBox.append(uvi);
+
+    var des = document.createElement('h3');
+    des.setAttribute('class', 'small-data');
+    des.textContent = "Condition: " + data.main + ' / ' + data.des;
+    weatherBox.append(des);
 
     //clears the input field
     document.querySelector('input').value = "";
