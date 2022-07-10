@@ -126,9 +126,30 @@ function displayWeather(data) {
     weatherBox.append(wind);
 
     var uvi = document.createElement('h3');
-    uvi.setAttribute('class', 'small-data');
+    uvi.setAttribute('class', 'small-data index');
+    var index = Math.floor(data.UV);
     uvi.textContent = "UV index: " + data.UV;
     weatherBox.append(uvi);
+    if (index >= 0 && index <= 2) {
+        var uviBox = document.querySelector('.index');
+        var colorBox = document.createElement('div');
+        colorBox.setAttribute('id', 'favorable');
+        colorBox.textContent = "Favorable"
+        uviBox.append(colorBox);
+    } else if (index > 2 && index < 6) {
+        var uviBox = document.querySelector('.index');
+        var colorBox = document.createElement('div');
+        colorBox.setAttribute('id', 'moderate');
+        colorBox.textContent = "Moderate";
+        uviBox.append(colorBox);
+    } else {
+        var uviBox = document.querySelector('.index');
+        var colorBox = document.createElement('div');
+        colorBox.setAttribute('id', 'severe');
+        colorBox.textContent = "Severe";
+        uviBox.append(colorBox);
+    }
+
 
     var des = document.createElement('h3');
     des.setAttribute('class', 'small-data');

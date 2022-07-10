@@ -101,6 +101,24 @@ button:hover {
     margin-left: 10px;
 }
 
+#favorable {
+    color: rgb(4, 199, 4);
+    margin-left: 10px;
+}
+
+#moderate {
+    color: yellow;
+    margin-left: 10px;
+}
+
+#severe {
+    color: rgb(252, 39, 39);
+    margin-left: 10px;
+}
+
+.index {
+    display: flex;
+}
 .today-weather {
     background-color: var(--color3);
     height: 330px;
