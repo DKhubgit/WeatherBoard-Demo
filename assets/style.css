@@ -72,6 +72,19 @@ button:hover {
     height: 500px;
 }
 
+.item {
+    background-color: var(--color2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    height: 15%;
+    margin-left: 13%;
+    border-radius: 7px;
+    margin-bottom: 5px;
+    font-size: 25px;
+}
+
 /* weather box CSS */
 .weather-box {
     background-color: var(--color5);

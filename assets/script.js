@@ -3,8 +3,11 @@ var onecall = config.API_KEY_ONECALL;
 var geoLoc = config.API_KEY_LOCATION;
 var forecast = config.API_KEY_FORECAST;
 
+var userHistory = JSON.parse(localStorage.getItem("WeatherHistory"));
+displayHistory();
 // need an async function to use await, executes asynchronously.
-async function initWeather() {
+async function initWeather(event) {
+    event.preventDefault();
     var City = document.querySelector("input").value;
 
     //waits for a value (in this case an object) from the resulting promise of the function
@@ -14,6 +17,9 @@ async function initWeather() {
     var otherData = await getForecast(locData.lat, locData.lon); //this returns an array of objects
     displayWeather(data);
     displayForecast(otherData);
+
+    addHistory(locData);
+    addToStorage(locData);
 
     //clears the input field
     document.querySelector('input').value = "";
@@ -185,7 +191,7 @@ function displayWeather(data) {
     return;
 }
 
-//displays the 5-day forecast with the arrays of objects passed in
+//displays the 5-day forecast with the arrays of objects passed in.
 //date, icon, wind, temp, humid
 function displayForecast(data) {
     var otherBox = document.querySelector('.other-weather');
@@ -237,6 +243,39 @@ function displayForecast(data) {
         smallBox.append(main);
     }
     return;
+}
+
+function displayHistory() {
+    var historyBox = document.querySelector('.history-box');
+    if (userHistory === null) {
+        return;
+    }
+    for (x = 0; x < userHistory.length; ++x) {
+        var item = document.createElement('div')
+        item.textContent = userHistory[x];
+        item.setAttribute('class', 'item');
+        historyBox.append(item);
+    }
+    return;
+}
+
+function addHistory(locData) {
+    var historyBox = document.querySelector('.history-box');
+    var item = document.createElement('div')
+    item.textContent = locData.name + ', ' + locData.state;
+    item.setAttribute('class', 'item');
+    historyBox.append(item);
+}
+
+function addToStorage(locData) {
+    var entry = locData.name + ', ' + locData.state;
+    if (userHistory === null) {
+        userHistory = [entry];
+    } else {
+        userHistory.push(entry);
+    }
+    console.log(userHistory);
+    localStorage.setItem('WeatherHistory', JSON.stringify(userHistory));
 }
 
 //waits for the 'find weather' button to be clicked
