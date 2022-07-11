@@ -11,9 +11,12 @@ async function initWeather() {
     //without an await it will just return the promise and not the actual object
     var locData = await getGeoLocation(City);
     var data = await getCurrWeather(locData.lat, locData.lon, locData);
-    var otherData = await getForecast(locData.lat, locData.lon);
+    var otherData = await getForecast(locData.lat, locData.lon); //this returns an array of objects
     displayWeather(data);
+    displayForecast(otherData);
 
+    //clears the input field
+    document.querySelector('input').value = "";
 }
 
 function getGeoLocation(City) {
@@ -61,12 +64,11 @@ function getCurrWeather(Lat,Lon,locData) {
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var newData = locData;
         var date = new Date(data.current.dt * 1000); //date is in milliseconds so multiple 1000
-        console.log(date.getDay());
         newData.date = '(' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ') ' + days[date.getDay()];
         newData.icon = data.current.weather[0].icon;
         newData.temp = data.current.temp; //Fahrenheit
         newData.humid = data.current.humidity; //in percentage %
-        newData.wind = data.current.wind_speed; //metre/sec
+        newData.wind = data.current.wind_speed; // miles/hour units=imperial
         newData.UV = data.current.uvi;
         newData.main = data.current.weather[0].main;
         newData.des = data.current.weather[0].description;
@@ -78,7 +80,7 @@ function getCurrWeather(Lat,Lon,locData) {
 }
 
 function getForecast(lat,lon) {
-    var url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + forecast;
+    var url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&cnt=50&appid=" + forecast;
 
     return fetch(url)
         .then(response => {
@@ -89,7 +91,21 @@ function getForecast(lat,lon) {
             }
         })
         .then(data => {
-            console.log(data);
+            var forecast = [];
+            var count = 0;
+            for (var i = 5; i < data.list.length; i = i + 8) {
+                forecast[count] = {
+                    date: data.list[i].dt_txt,
+                    icon: data.list[i].weather[0].icon,
+                    wind: data.list[i].wind.speed, //miles/hour units=imperial
+                    temp: data.list[i].main.temp,
+                    humid: data.list[i].main.humidity,
+                    main: data.list[i].weather[0].main,
+                    des: data.list[i].weather[0].description
+                }
+                count++;
+            }
+            return forecast;
         })
         .catch(error => {
             console.error('There was an error with 3rd Fetch operation', error);
@@ -101,7 +117,6 @@ function getForecast(lat,lon) {
 function displayWeather(data) {
     var weatherBox = document.querySelector('.today-weather');
     var tempBox = document.querySelector('.temp-box');
-    console.log(data);
     if (weatherBox.children.length !== 0) {
         while (weatherBox.firstChild) {
             weatherBox.removeChild(weatherBox.firstChild);
@@ -135,7 +150,7 @@ function displayWeather(data) {
 
     var wind = document.createElement('h3');
     wind.setAttribute('class', 'small-data');
-    wind.textContent = "Wind Speed: " + data.wind + " meter/sec";
+    wind.textContent = "Wind Speed: " + data.wind + " mph";
     weatherBox.append(wind);
 
     var uvi = document.createElement('h3');
@@ -167,9 +182,61 @@ function displayWeather(data) {
     des.setAttribute('class', 'small-data');
     des.textContent = "Condition: " + data.main + ' / ' + data.des;
     weatherBox.append(des);
+    return;
+}
 
-    //clears the input field
-    document.querySelector('input').value = "";
+//displays the 5-day forecast with the arrays of objects passed in
+//date, icon, wind, temp, humid
+function displayForecast(data) {
+    var otherBox = document.querySelector('.other-weather');
+
+    if (otherBox.firstChild) {
+        while (otherBox.firstChild) {
+            otherBox.removeChild(otherBox.firstChild);
+        }
+    }
+
+    for (var p = 0; p < data.length; ++p) {
+        var smallBox = document.createElement('div');
+        smallBox.setAttribute('class', 'entry-box' )
+        otherBox.append(smallBox);
+
+        var tempIcon = document.createElement('div')
+        tempIcon.setAttribute('class', 'small-box');
+        smallBox.append(tempIcon);
+
+        var temp = document.createElement('h2');
+        temp.textContent = Math.floor(data[p].temp) + "°F ";
+        tempIcon.append(temp);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('id', 'small-icon');
+        icon.setAttribute('src', "http://openweathermap.org/img/wn/" + data[p].icon + ".png")
+        icon.setAttribute('alt', "Weather condition icon")
+        tempIcon.append(icon);
+
+        var date = document.createElement('h4');
+        var text = data[p].date.split(" ");
+        date.textContent = '(' + text[0] + ')';
+        date.setAttribute('class', 'tiny-data');
+        smallBox.append(date);
+
+        var humid = document.createElement('h4');
+        humid.textContent = 'Humidity: ' + data[p].humid + '%';
+        humid.setAttribute('class', 'tiny-data');
+        smallBox.append(humid);
+
+        var wind = document.createElement('h4');
+        wind.textContent = 'Wind: ' + data[p].wind + ' mph';
+        wind.setAttribute('class', 'tiny-data');
+        smallBox.append(wind);
+
+        var main = document.createElement('h4');
+        main.textContent = data[p].main + ' / ' + data[p].des;
+        main.setAttribute('class', 'tiny-data');
+        smallBox.append(main);
+    }
+    return;
 }
 
 //waits for the 'find weather' button to be clicked
