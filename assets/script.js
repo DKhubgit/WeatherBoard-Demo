@@ -97,7 +97,15 @@ function getForecast(lat,lon) {
         .then(data => {
             var forecast = [];
             var count = 0;
-            for (var i = 0; i < data.list.length; i = i + 8) {
+            var index = 0;
+            for (var c = 0; c < data.list.length; ++c) { // looks for the next day
+                var string = data.list[c].dt_txt.split(" ");
+                if (string[1] === "00:00:00") {
+                    index = c;
+                    break;
+                }
+            }
+            for (var i = index; i < data.list.length; i = i + 8) {
                 forecast[count] = {
                     date: data.list[i].dt_txt,
                     icon: data.list[i].weather[0].icon,

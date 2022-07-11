@@ -88,7 +88,7 @@ button:hover {
 /* weather box CSS */
 .weather-box {
     background-color: var(--color5);
-    margin-left: 25px;
+    margin-left: 15px;
     width: 72%;
     color: white;
 }
@@ -142,13 +142,16 @@ button:hover {
 .other-weather {
     display: flex;
     justify-content: space-around;
-    background-color: var(--color3);
+    background-color: var(--color5);
     height: 240px;
 }
 
 .entry-box {
-    width: 50%;
-    border: solid black 2px;
+    width: 49%;
+    border-top: solid var(--color5) 3px;
+    border-right: solid var(--color5) 3px;
+    border-bottom: solid var(--color5) 3px;
+    background-color: var(--color3);
 }
 
 .small-box {
@@ -164,4 +167,25 @@ button:hover {
 
 .tiny-data {
     margin-left: 10px;
+}
+
+/* responsive layout for the forecast weather boxes */
+@media (max-width: 1200px) {
+    .other-weather {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        background-color: var(--color5);
+        height: 100%;
+        width: 100%;
+    }
+}
+@media (max-width: 595px) {
+    .entry-box {
+        width: 49%;
+        border-top: solid var(--color5) 3px;
+        border-right: solid var(--color5) 3px;
+        border-bottom: solid var(--color5) 3px;
+        background-color: var(--color3);
+    }
 }
