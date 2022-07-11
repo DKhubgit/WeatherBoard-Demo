@@ -6,8 +6,7 @@ var forecast = config.API_KEY_FORECAST;
 var userHistory = JSON.parse(localStorage.getItem("WeatherHistory"));
 displayHistory();
 // need an async function to use await, executes asynchronously.
-async function initWeather(event) {
-    event.preventDefault();
+async function initWeather() {
     var City = document.querySelector("input").value;
 
     //waits for a value (in this case an object) from the resulting promise of the function
@@ -303,6 +302,15 @@ function addToStorage(locData) {
     localStorage.setItem('WeatherHistory', JSON.stringify(userHistory));
     return;
 }
+
+var historyItems = document.querySelectorAll('.item');
+historyItems.forEach(element => {
+    element.addEventListener('click', function() {
+        document.querySelector("input").value = element.textContent;
+        initWeather();
+    })
+});
+
 
 //waits for the 'find weather' button to be clicked
 document.querySelector("button").addEventListener('click', initWeather);

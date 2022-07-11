@@ -84,6 +84,10 @@ button:hover {
     margin-bottom: 5px;
     font-size: 18px;
 }
+.item:hover {
+    cursor: pointer;
+    background-color: var(--color3);
+}
 
 /* weather box CSS */
 .weather-box {
