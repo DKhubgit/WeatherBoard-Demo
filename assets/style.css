@@ -79,9 +79,9 @@ button:hover {
 }
 
 #clear {
-    width: 80px;
+    width: 50%;
     height: 35px;
-    margin-left: 38%;
+    margin-left: 25%;
 }
 
 .item {

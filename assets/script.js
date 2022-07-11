@@ -331,6 +331,4 @@ document.querySelector("input").addEventListener('keydown', function(event) {
     } else {
         return;
     }
-    // event.preventDefault();
 });
-//maybe add a event listener for when the "enter" key is pressed
