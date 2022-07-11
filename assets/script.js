@@ -322,5 +322,15 @@ document.getElementById('clear').addEventListener('click', function() {
 
 //waits for the 'find weather' button to be clicked
 document.querySelector("button").addEventListener('click', initWeather);
-
+document.querySelector("input").addEventListener('keydown', function(event) {
+    if (document.querySelector("input").value === '') {
+        return;
+    }
+    if (event.key === 'Enter') {
+        initWeather();
+    } else {
+        return;
+    }
+    // event.preventDefault();
+});
 //maybe add a event listener for when the "enter" key is pressed
