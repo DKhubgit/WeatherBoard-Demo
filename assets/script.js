@@ -19,7 +19,6 @@ async function initWeather(event) {
     displayForecast(otherData);
 
     addHistory(locData);
-    addToStorage(locData);
 
     //clears the input field
     document.querySelector('input').value = "";
@@ -54,7 +53,6 @@ function getGeoLocation(City) {
      })
 }
 
-//gets the Current weather
 function getCurrWeather(Lat,Lon,locData) {
     var urlCurrWeather = "https://api.openweathermap.org/data/2.5/onecall?lat=" + Lat + "&lon=" + Lon + "&exclude=minutely,hourly,daily,alerts&units=imperial&appid=" + onecall;
     //calls the current weather API and returns an object
@@ -99,7 +97,7 @@ function getForecast(lat,lon) {
         .then(data => {
             var forecast = [];
             var count = 0;
-            for (var i = 5; i < data.list.length; i = i + 8) {
+            for (var i = 0; i < data.list.length; i = i + 8) {
                 forecast[count] = {
                     date: data.list[i].dt_txt,
                     icon: data.list[i].weather[0].icon,
@@ -261,21 +259,41 @@ function displayHistory() {
 
 function addHistory(locData) {
     var historyBox = document.querySelector('.history-box');
+    var text = locData.name + ', ' + locData.state;
+    if (userHistory !== null) { //checks for duplicates
+        if (userHistory.includes(text)) {
+            return;
+        }
+    }
+    if (historyBox.children.length > 5) { //limit number of history items
+        historyBox.removeChild(historyBox.children[1]);
+    }
     var item = document.createElement('div')
-    item.textContent = locData.name + ', ' + locData.state;
+    item.textContent = text;
     item.setAttribute('class', 'item');
     historyBox.append(item);
+
+    addToStorage(locData);
+
+    return;
 }
 
 function addToStorage(locData) {
     var entry = locData.name + ', ' + locData.state;
-    if (userHistory === null) {
+    if (userHistory === null) { // needs to go first so that there is no null reading
         userHistory = [entry];
+    } else if (userHistory.includes(entry)) { //checks for duplicates
+        return;
     } else {
-        userHistory.push(entry);
+        if (userHistory.length > 4) { // limit number of history items
+            userHistory.shift();
+            userHistory.push(entry);
+        } else {
+            userHistory.push(entry);
+        }
     }
-    console.log(userHistory);
     localStorage.setItem('WeatherHistory', JSON.stringify(userHistory));
+    return;
 }
 
 //waits for the 'find weather' button to be clicked
