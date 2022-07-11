@@ -311,6 +311,14 @@ historyItems.forEach(element => {
     })
 });
 
+document.getElementById('clear').addEventListener('click', function() {
+    localStorage.removeItem('WeatherHistory');
+    var historyBox = document.querySelector('.history-box');
+    while (historyBox.children[1]) {
+        historyBox.removeChild(historyBox.children[1]);
+    }
+    return;
+})
 
 //waits for the 'find weather' button to be clicked
 document.querySelector("button").addEventListener('click', initWeather);
